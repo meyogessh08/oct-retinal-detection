@@ -60,14 +60,14 @@ def _unfreeze(module: nn.Module) -> None:
 # ------------------------------------------------------------------ factory
 def build_model(name: str, num_classes: int = config.NUM_CLASSES,
                 mode: str = "fine_tune", pretrained: bool = True,
-                dropout: float = 0.5) -> nn.Module:
+                dropout: float = 0.5, use_batchnorm: bool = True) -> nn.Module:
     """Create a model by name.
 
     name : one of config.MODEL_NAMES
     mode : 'feature_extraction' or 'fine_tune' (ignored for custom_cnn)
     """
     if name == "custom_cnn":
-        return CustomCNN(num_classes, dropout=dropout)
+        return CustomCNN(num_classes, dropout=dropout, use_batchnorm=use_batchnorm)
 
     weights = "DEFAULT" if pretrained else None
 
@@ -138,8 +138,10 @@ def save_checkpoint(model: nn.Module, name: str, path, class_names=None, extra=N
 def load_checkpoint(path, device="cpu"):
     """Rebuild a model from a checkpoint saved by save_checkpoint()."""
     ckpt = torch.load(path, map_location=device)
+    extra = ckpt.get("extra") or {}
+    use_batchnorm = extra.get("use_batchnorm", True)
     model = build_model(ckpt["model_name"], num_classes=len(ckpt["class_names"]),
-                        pretrained=False, mode="full")
+                        pretrained=False, mode="full", use_batchnorm=use_batchnorm)
     model.load_state_dict(ckpt["state_dict"])
     model.to(device).eval()
     return model, ckpt["model_name"], ckpt["class_names"]

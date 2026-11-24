@@ -88,6 +88,7 @@ def main():
     parser.add_argument("--dropout", type=float, default=0.5)
     parser.add_argument("--train_per_class", type=int, default=config.TRAIN_PER_CLASS)
     parser.add_argument("--tag", default="", help="suffix for output file names")
+    parser.add_argument("--no_batchnorm", action="store_true", help="Disable BatchNorm in CustomCNN")
     args = parser.parse_args()
 
     set_seed()
@@ -101,7 +102,7 @@ def main():
         dataset, pretrained=pretrained, batch_size=args.batch_size,
         train_per_class=args.train_per_class)
 
-    model = build_model(args.model, len(class_names), mode=args.mode, dropout=args.dropout)
+    model = build_model(args.model, len(class_names), mode=args.mode, dropout=args.dropout, use_batchnorm=not args.no_batchnorm)
     print(f"Trainable parameters: {count_parameters(model):,}")
 
     model, history = train_model(model, train_loader, val_loader, device,
@@ -110,7 +111,7 @@ def main():
 
     run_name = f"{args.model}_{args.mode if pretrained else 'scratch'}{args.tag}"
     save_checkpoint(model, args.model, config.MODEL_DIR / f"{run_name}.pt", class_names,
-                    extra={"mode": args.mode, "lr": args.lr})
+                    extra={"mode": args.mode, "lr": args.lr, "use_batchnorm": not args.no_batchnorm})
     history["trainable_params"] = count_parameters(model)
     save_json(history, config.RESULT_DIR / f"{run_name}_history.json")
     plot_history(history, run_name, config.FIGURE_DIR / f"{run_name}_curves.png")
