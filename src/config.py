@@ -14,7 +14,7 @@ RESULT_DIR = OUTPUT_DIR / "results"
 # ---------------------------------------------------------------- dataset
 # Hugging Face dataset id. Replace with the exact id used in the course notebook
 # ("OCT dataset.ipynb") if it differs.
-HF_DATASET_ID = "Falah/Retinal_OCT2017"
+HF_DATASET_ID = "zacharielegault/Kermany2017-OCT"
 
 # Fallback label names. ALWAYS confirm with:
 #   dataset["train"].features["label"].names
