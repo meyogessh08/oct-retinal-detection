@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Data / caches - never commit datasets
+data/
+.cache/
+huggingface/
+
+# Large trained models: commit ONLY the small best model (see README)
+outputs/models/*.pt
+!outputs/models/best_model.pt
+
+# Secrets
+.env
+kaggle.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
