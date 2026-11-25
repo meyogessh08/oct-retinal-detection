@@ -7,6 +7,7 @@ MODELS = [
     "mobilenet_v2_fine_tune.pt",
     "resnet18_full.pt",
     "custom_cnn_scratch.pt",
+    "custom_cnn_scratch_nobn.pt",
 ]
 
 x = torch.randn(1, 3, 224, 224)

@@ -89,6 +89,7 @@ def main():
     parser.add_argument("--train_per_class", type=int, default=config.TRAIN_PER_CLASS)
     parser.add_argument("--tag", default="", help="suffix for output file names")
     parser.add_argument("--no_batchnorm", action="store_true", help="Disable BatchNorm in CustomCNN")
+    parser.add_argument("--patience", type=int, default=4, help="early stopping patience")
     args = parser.parse_args()
 
     set_seed()
@@ -107,7 +108,8 @@ def main():
 
     model, history = train_model(model, train_loader, val_loader, device,
                                  epochs=args.epochs, lr=args.lr,
-                                 weight_decay=args.weight_decay)
+                                 weight_decay=args.weight_decay,
+                                 patience=args.patience)
 
     run_name = f"{args.model}_{args.mode if pretrained else 'scratch'}{args.tag}"
     save_checkpoint(model, args.model, config.MODEL_DIR / f"{run_name}.pt", class_names,

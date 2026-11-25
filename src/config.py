@@ -29,7 +29,7 @@ SEED = 42
 # ---------------------------------------------------------------- image / training
 IMAGE_SIZE = 224
 BATCH_SIZE = 64
-NUM_WORKERS = 4          # set to 0 on Windows if DataLoader hangs
+NUM_WORKERS = 2          # set to 0 on Windows if DataLoader hangs
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
